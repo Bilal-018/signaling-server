@@ -12,7 +12,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:3000",
-      "https://bb51-37-216-212-89.ngrok-free.app",   // ← Add your current ngrok URL here
+      "https://a250-37-216-212-89.ngrok-free.app",   // ← Add your current ngrok URL here
       "http://127.0.0.1:3000",
       "https://meetify-ashy.vercel.app/",
       "*"   // Temporary for testing - remove later

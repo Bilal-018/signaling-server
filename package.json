@@ -1,11 +1,11 @@
 {
   "name": "random-chat-signaling",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts",
+    "build": "tsc",
     "start": "node dist/index.js",
-    "build": "tsc"
+    "dev": "nodemon --exec ts-node src/index.ts"
   },
   "dependencies": {
     "cors": "^2.8.6",
@@ -15,9 +15,12 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/node": "^25.5.0",
+    "@types/node": "^20.0.0",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
