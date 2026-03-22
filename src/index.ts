@@ -12,10 +12,14 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:3000",
-      "https://your-frontend-domain.vercel.app",   // ← Change to your real Vercel URL later
-      "*"                                            // ← Only for local testing! Remove in production
+      "https://bb51-37-216-212-89.ngrok-free.app",   // ← Add your current ngrok URL here
+      "http://127.0.0.1:3000",
+      "https://meetify-ashy.vercel.app/",
+      "*"   // Temporary for testing - remove later
     ],
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
+    credentials: true,
+    allowedHeaders: ["*"]
   }
 });
 
@@ -51,15 +55,23 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents>)
 
   // Join random matching queue
   socket.on('join-queue', () => {
+    console.log(`[Server] join-queue received from ${socket.id}`);
+
     if (waitingUser && waitingUser !== socket.id) {
       const room = [waitingUser, socket.id].sort().join('--');
 
       socket.join(room);
       io.sockets.sockets.get(waitingUser)?.join(room);
 
-      // Notify both users
+      console.log(`[Server] MATCHING ${waitingUser} with ${socket.id}`);
+
+      // Send to first user
       socket.emit('matched', { peerId: waitingUser, isInitiator: false });
+      console.log(`[Server] Sent matched to ${socket.id}`);
+
+      // Send to second user
       io.to(waitingUser).emit('matched', { peerId: socket.id, isInitiator: true });
+      console.log(`[Server] Sent matched to ${waitingUser}`);
 
       activePairs.set(socket.id, room);
       activePairs.set(waitingUser, room);
@@ -68,6 +80,7 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents>)
     } else {
       waitingUser = socket.id;
       socket.emit('status', 'waiting');
+      console.log(`[Server] ${socket.id} is now waiting`);
     }
   });
 
